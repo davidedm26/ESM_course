@@ -1,1 +1,1 @@
-Solutions for all the exercisez of the course
+Solutions for all the exercises of the course
