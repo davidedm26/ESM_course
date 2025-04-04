@@ -12,6 +12,10 @@ import skimage.io as io # importa il modulo Input/Output di SK-Image
 import scipy.ndimage as ndi
 import mylib as ml
 
+# Rumore sale e pepe. Scegliete un’immagine, quindi aggiungete rumore sale e pepe (usate la funzione
+# skimage.util.random noise), applicate il filtro mediano e valutate il risultato sia visivamente sia
+# tramite l’errore quadratico medio se la dimensione della finestra `e 5, 7, 9.
+
 plt.close('all')
 #rumore sale e pepe
 
@@ -19,15 +23,24 @@ x=ml.leggiJpeg('../immagini/dorian.jpg')
 
 from skimage.util import random_noise
 # # Add salt-and-pepper noise to the image.
-# noisy = random_noise(x/255, 's&p') *255
+noisy = random_noise(x/255, 's&p') *255
 ml.showImage(x, 'original')
-# ml.showImage(noiys, 'noisy')
+ml.showImage(noisy, 'noisy')
 
-#applicazione filtro mediano
-y = ndi.median_filter(x,5)
 
-ml.showImage(y, 'median filtered img')
-#calcolo errore quadratico medio 
-qse= np.mean( (y-x)**2  )
 
+
+arr_k = np.array([5,7,9])
+
+for k in arr_k:
+    y = ndi.median_filter(x,k) #applicazione filtro mediano
+    ml.showImage(y, f'median filtered img k={k}' ) 
+   
+    qse= np.mean( (y-x)**2  )  #calcolo errore quadratico medio 
+    print (qse)
+
+#I valori del QSE crescono col cresce della dimensione della finestra di filtraggio mediano
+# 33.82203674316406
+# 39.31272888183594
+# 44.220977783203125
 

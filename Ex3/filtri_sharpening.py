@@ -174,7 +174,6 @@ ml.showImage(msk, 'mask')
 plt.close('all')
 
 #proviamo a fare smoothing prima del calcolo del gradiente
-#controlla perchè non mi trovo
 x= ml.leggiJpeg('../immagini/angiogramma.jpg')
 x= np.float64(x)
 ml.showImage(x, 'input')
@@ -192,9 +191,9 @@ y1 = ndi.correlate(y,h1)
 y2= ndi.correlate(y,h2)
 
 g= np.sqrt(y1**2+y2**2)
-ml.showImage(g, 'gradiente') #notiamo che i bordi diagonali non si vedono bene
+ml.showImage(g, 'gradiente') 
 
-#se volessimo ottenere una mappa di segmentazione dobbiamo applicare il tresholding (sogliatura)
+# #se volessimo ottenere una mappa di segmentazione dobbiamo applicare il tresholding (sogliatura)
 T = 1.5*np.mean(g)
 msk = g > T
 ml.showImage(msk, 'mask')
@@ -202,8 +201,7 @@ ml.showImage(msk, 'mask')
 
 
 #LAPLACIANO DI UNA GAUSSIANA
-#seg utills sta sul team, scaricalo da la
-
+#Procedura seguita alla lettera ma non funziona
 plt.close('all')
 #laplaciano di una gaussiana
 x = ml.leggiJpeg('../immagini/angio.16bit.png')
@@ -211,10 +209,10 @@ sigma=5
 y = ndi.gaussian_laplace(x, (sigma,sigma))
 ml.showImage(y, 'gauss-laplace')
 
-# # from seg_utils import zero_crossing
-# # z = zero_crossing(y)
+from seg_utils import zero_crossing
+z = zero_crossing(y)
 
-# # ml.showImage(z, 'zero cross')
+ml.showImage(z, 'zero cross')
 
 
 
