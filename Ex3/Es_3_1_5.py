@@ -83,7 +83,7 @@ plt.title('Guida in output')
 
 # Mostrate a video anche il prodotto xg e yg e un loro
 # zoom 100 × 100 pixel vicino ad un bordo.
-prod_xg = x*g
+prod_xg = (255)*g
 prod_yg = y*g
 plt.figure()
 plt.subplot(1,2,1)

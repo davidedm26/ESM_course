@@ -23,15 +23,15 @@ import mylib as ml
 x = np.float64( io.imread('../immagini/volto.tif'))
 ml.showImage(x, 'input')
 
-X = np.fft.fft2(x) #faccio trasformata
-Y = np.log(1+np.abs(np.fft.fftshift(X))) #shift + modulo
+X = np.fft.fftshift(np.fft.fft2(x))
+
 plt.figure();
-plt.imshow(Y, clim=None, cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
+plt.imshow( np.log(1+np.abs(X)), clim=None, cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
 plt.title('modulo - spettro')
 
 plt.figure();
-Y = np.angle(np.fft.fftshift(X))
-plt.imshow(Y, clim=None, cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
+
+plt.imshow( (np.angle(X)), clim=None, cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
 plt.title('modulo - fase')
 
 
@@ -41,12 +41,8 @@ X2 = np.exp(1j*np.angle(X)) #cancello ampiezza
 y1 = np.real(np.fft.ifft2(np.fft.ifftshift(X1))) #la parte imm non ci dovrebbe stare ma faccio cast a real per sicurezza
 y2 = np.real(np.fft.ifft2(np.fft.ifftshift(X2)))
 
-ml.showImage(y1-np.min(y1)**0.1, 'ricostruzione da modulo')
+ml.showImage((y1-np.min(y1))**0.1, 'ricostruzione da modulo')
 ml.showImage(y2, 'ricostruzione da fase')
-
-#rivedere script DC
-
-
 
 
 

@@ -19,12 +19,17 @@ plt.close('all')
 x=ml.leggiJpeg('../immagini/luna.jpg')
 x= np.float64(x)
 
-h = np.array ( [ [0,-1,0],[-1,5,-1],[0,-1,0]  ])
 
-y = ndi.correlate(x, h)
+# Di seguito la maschera del filtro che realizza il Laplaciano
+# secondo la definizione di derivata indicata nel testo
+h = [[0,0,1,0,0],[0,0,0,0,0],[1,0,-4,0,1],[0,0,0,0,0],[0,0,1,0,0]]
+# h = np.array(h, np.float64)
+y = ndi.correlate(x,h)
 
-ml.showImage(y, 'filtrata con laplaciano' )
+ml.showImage(y, 'filtrata con laplaciano' ) #ricava i contorni
 plt.colorbar()
 
-# ml.showHist(y, 'hist')
+z= x-y
+ml.showImage(z, 'enhanced con laplaciano' ) 
+plt.colorbar()
 
