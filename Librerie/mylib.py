@@ -80,8 +80,23 @@ def ruota(x, theta):
     y = warp( x, A, order=1)
     return y;
     
+def rgb2cmy(x): #cmy sono le complementari di rgb
+    y = 1.0 - x
+    return y
 
+def rgb2cmyk(x): #cmy sono le complementari di rgb
+    z = 1.0 - x
+    K = np.min(z, -1)
+    
+    C = z[:,:,0] - K # rimozione del Nero al Ciano
+    M = z[:,:,1] - K # rimozione del Nero al Magenta
+    Y = z[:,:,2] - K # rimozione del Nero al Giallo
+    
+    y = np.stack((C,M,Y,K),-1)
+    return y
 
+def cmy2rgb(x):
+    return 1-x
 
 
 

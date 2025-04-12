@@ -155,25 +155,25 @@ plt.title('Trasformata di Fourier immagine rumorosa');
 
 # Definizione del filtro
 nu = 0.2; B = 0.03;
-m = np.fft.fftshift(np.fft.fftfreq(X.shape[0]))
-n = np.fft.fftshift(np.fft.fftfreq(X.shape[1]))
+m = np.fft.fftshift(np.fft.fftfreq(X.shape[0])) #la fft viene vista nelle due dimensioni separatamente
+n = np.fft.fftshift(np.fft.fftfreq(X.shape[1]))#questo perchè cosi ci risulta possibile lavorare con la maschera
 l,k = np.meshgrid(n,m)
 D1 = np.sqrt(k**2+(l-nu)**2)
 D2 = np.sqrt(k**2+(l+nu)**2)
 H = (D1>B) & (D2>B)
 plt.figure();
 plt.imshow(H, clim=[0,1], cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
-plt.title('Riposta in frequenza del filtro');
+plt.title('Riposta in frequenza del filtro [PROF]');
 # Filtraggio
 Y = X * H;
 plt.figure();
 plt.imshow(np.log(1+np.abs(Y)), clim=None, \
 cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
-plt.title('Trasformata di Fourier immagine filtrata');
+plt.title('Trasformata di Fourier immagine filtrata [PROF]');
 
 y = np.real(np.fft.ifft2(np.fft.ifftshift(Y)));
 plt.figure(); plt.imshow(y, clim=[0,256], cmap='gray');
-plt.title('Immagine filtrata');
+plt.title('Immagine filtrata con filtro prod');
 # Calcolo MSE
 xo = np.fromfile('../immagini/lena.y', np.uint8)
 xo = np.reshape(xo, [512,512])
@@ -184,8 +184,8 @@ MSE = np.mean((xo-y) ** 2)
 print('MSE primo filtraggio:', MSE)
 # plt.close('all')
 
-#alternativa
-# Definizione del filtro
+# # alternativa
+# # Definizione del filtro
 # Bk = 0.004; Bl = 0.02
 # H1 = (-Bk <= k) & (k <= Bk)
 # H2 = (-Bl <= l) & (l <= Bl)
@@ -200,48 +200,82 @@ print('MSE primo filtraggio:', MSE)
 # MSE = np.mean((xo-y) ** 2)
 # print('MSE secondo filtraggio:', MSE)
 
-#L'Esecuzione dell'assistente non è convincente
+
+
+
+# L'Esecuzione dell'assistente non è convincente
 plt.close('all')
 #Svolgimento personale
 #TOGLIERE LE DUE DELTA DALL'IMMAGINE RUMOROSA
 #filtro elimina banda
 #potremmo progettarre un filtro che toglie la griglia tipo maschera
 
-M, N = X.shape
-cx, cy = M // 2, N // 2 #coordinate del centro
+#SOLUZIONE 1 DAVIDE - Spostare i notch in corrispondenza delle delta
+r = 0.03
+nu=0.2
 
-#maschera di tutti 1
-H = np.ones_like(X)
+m = np.fft.fftshift(np.fft.fftfreq(X.shape[0]))
+n= np.fft.fftshift(np.fft.fftfreq(X.shape[1]))
 
-#parametri dei notch
-raggio = 20  #raggio dei cerchi
-offset = 102  #distanza dal centro sulla diagonale
+l,k = np.meshgrid(n,m) #l dim orizzontale, k dim verticale
+#cerchietto 1 z = rad( (x+xo)^2 + (y-yo)^2) < r dunque per escludere solo cerchietto metto >
+C1 = np.sqrt( (l+nu)**2 + (k-nu)**2 ) > r
+C2 = np.sqrt( (l-nu)**2 + (k+nu)**2) > r
 
-#coordinate griglia
-M,N = np.meshgrid(np.arange(M), np.arange(N))
+H = C1 & C2
 
-# Primo cerchio sulla diagonale principale
-mask1 = (N - (cx + offset))**2 + (M - (cy - offset))**2 <= raggio**2
-
-# Secondo cerchio (simmetrico rispetto al centro)
-mask2 = (N - (cx - offset))**2 + (M - (cy + offset))**2 <= raggio**2
-
-# Applica i notch
-H[mask1] = 0
-H[mask2] = 0
+plt.figure();
+plt.imshow(H, clim=[0,1], cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
+plt.title('Riposta in frequenza del filtro [DDM]');
 
 # Filtraggio
 Y = X * H;
 plt.figure();
 plt.imshow(np.log(1+np.abs(Y)), clim=None, \
 cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
-plt.title('Filtro sintetizzato');
+plt.title('Filtraggio in fq[DDM]');
 
 y = np.real(np.fft.ifft2(np.fft.ifftshift(Y)));
 plt.figure(); plt.imshow(y, clim=[0,256], cmap='gray');
-plt.title('Immagine filtrata');
+plt.title('Immagine filtrata [DDM]');
 MSE = np.mean((xo-y) ** 2)
 print('MSE secondo filtraggio:', MSE)
+#notiamo che l'MSE è sceso abbastanza ma c'è ancora la componente dovuta alle griglie
+
+
+#Rimozione griglie
+#procedo per singoli segmenti
+s=0.007 #spesso linea
+S1= 1 - ( (l < -nu+s) & ( l > -nu-s))
+S2= 1 - ( (l < nu+s) & ( l > nu-s))
+S3= 1 - ( (k < -nu+s) & ( k > -nu-s))
+S4= 1 - ( (k < nu+s) & ( k > nu-s))
+
+
+S= S1 & S2 & S3 & S4 & H;
+
+plt.figure();
+plt.imshow(S, clim=[0,1], cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
+plt.title('Riposta in frequenza del filtro griglia + notch [DDM]');
+
+# Filtraggio
+Y = X * S;
+plt.figure();
+plt.imshow(np.log(1+np.abs(Y)), clim=None, \
+cmap='gray', extent=(-0.5,+0.5,+0.5,-0.5));
+plt.title('Filtraggio in fq[DDM]');
+
+y = np.real(np.fft.ifft2(np.fft.ifftshift(Y)));
+plt.figure(); plt.imshow(y, clim=[0,256], cmap='gray');
+plt.title('Immagine filtrata [DDM]');
+MSE = np.mean((xo-y) ** 2)
+print('MSE  filtraggio completo:', MSE)
+#notiamo che l'MSE è quasi nullo
+
+
+
+
+
 
 
 

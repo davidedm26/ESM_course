@@ -7,6 +7,7 @@ Created on Sat Apr  5 15:40:47 2025
 
 import sys
 sys.path.append("../Librerie") 
+#sys.path.append(r"C:\Users\david\OneDrive\ESM\Copia_Workspace\Librerie")
 import numpy as np # importa Numpy
 import matplotlib.pyplot as plt # importa Matplotlib
 import scipy.ndimage as ndi # importa Scipy per le immagini
