@@ -28,7 +28,7 @@ def varianze(x,K):
     return ndi.generic_filter(x, np.var, (K,K))
 
 ##main
-x= io.imread('./immagini/dorian.jpg')    #prendi un'immagine
+x= io.imread('../immagini/dorian.jpg')    #prendi un'immagine
 #converti in float64
 x = np.float64(x)
 #mostrala
@@ -47,16 +47,17 @@ plt.subplot(1,3,2); plt.imshow(y, clim=[0,255], cmap='gray');
 # l'immagine delle varianze locali su finestre K X K. Usate questa funzione per valutare e visualizzare
 # l'immagine delle varianze dell'immagine filamento.jpg usando blocchi 33. Che tipo di informazioni
 # vi da sull'immagine?   
+plt.close('all')
 
-x_fil = io.imread('./immagini/filamento.jpg')
+x_fil = io.imread('../immagini/filamento.jpg')
 
 x_var = varianze(x_fil,3);
 plt.subplot(1,3,3); plt.imshow(x_var, clim=[0,255], cmap='gray');
 
-plt.close();
-plt.hist(x, bins=5, density=True)
-plt.show()
+# plt.close();
 
+# plt.hist(x, bins=5, density=True)
+# plt.show()
 
 
 

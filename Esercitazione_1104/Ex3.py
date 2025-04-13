@@ -57,8 +57,8 @@ def test(x):
     mse_abs = np.mean( (np.abs(X)-np.abs(Z))**2 )
     mse_pha = np.mean( (np.angle(X)-np.angle(Z))**2 )
     
-    f3 = np.log10(mse_abs)
-    f4 = np.log10(mse_pha)
+    f3 = 10*np.log10(mse_abs)
+    f4 = 10*np.log10(mse_pha)
 
     f = 0.7*f1 + 1.5*f2 + 0.01*f3 + 0.001*f4
     
@@ -68,7 +68,7 @@ def test(x):
         return 2
     
 #leggi immagine
-x = io.imread("1.png")
+x = io.imread("4.png")
 x = np.float64(x)
 
 #mostra immagine

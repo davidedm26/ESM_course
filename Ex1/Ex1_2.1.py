@@ -12,10 +12,10 @@ import skimage.io as io # importa il modulo Input/Output di SK-Image
 ##rappresentazione in falsi colori
 plt.close()
 
-R = io.imread('./Immagini/Washington_red.tif')
-G = io.imread('./Immagini/Washington_green.tif')
-B = io.imread('./Immagini/Washingyon_blue.TIF')
-I = io.imread('./Immagini/Washington_infrared.tif')
+R = io.imread('../Immagini/Washington_red.tif')
+G = io.imread('../Immagini/Washington_green.tif')
+B = io.imread('../Immagini/Washingyon_blue.TIF')
+I = io.imread('../Immagini/Washington_infrared.tif')
 
 # plt.figure(); plt.imshow(x);
 z= np.stack((I,G,B), -1)
