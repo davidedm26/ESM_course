@@ -67,3 +67,5 @@ y = np.stack((yr,yg,yb),-1) /255
 plt.figure(5)
 plt.title('Filtraggio delle 3 componenti')
 plt.imshow(y);
+
+#BASTAVA FILTRARE LA COMPONENTE I DOPO AVER CONVERTITO IN HSI
