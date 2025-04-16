@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import scipy.ndimage as ndi
 import skimage.morphology as morph
 
-x= np.float64(io.imread('../Immagini/testo.tif'))<128
+x= np.float64(io.imread('../Immagini/immagini_lab_morfologia/testo_fax_bool.tif'))
 plt.figure(1)
 plt.imshow(x, clim=None, cmap='gray')
 

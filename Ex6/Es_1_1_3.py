@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr 15 16:47:19 2025
+Created on Wed Apr 16 19:25:27 2025
 
 @author: david
 """
@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 import scipy.ndimage as ndi
 import skimage.morphology as morph
 
-x= np.float64(io.imread('../Immagini//immagini_lab_morfologia/quadrati_bool.tif'))
+x= np.float64(io.imread('../Immagini//immagini_lab_morfologia/circbw_bool.tif'))
 plt.figure(1)
 plt.imshow(x, clim=None, cmap='gray')
 
-b = morph.rectangle(13, 13)
+b = morph.rectangle(50, 60)
 y = morph.opening(x,b)
 plt.figure(2)
 plt.imshow(y, clim=None, cmap='gray')

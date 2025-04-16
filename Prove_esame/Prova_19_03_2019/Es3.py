@@ -17,7 +17,6 @@ plt.figure(1)
 plt.imshow(x)
 plt.title('input')
 
-.
 
 
 

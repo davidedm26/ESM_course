@@ -17,38 +17,53 @@ import skimage.color as col
 #Prendere immagine '/immagini_lab_morfologia/cells.tif' e fare le operazioni per evidenziare i contorni delle cellule
 #e mappare in due mappae cellule scure e cellule chiare
 
+# EX. 3 Si vuole segmentare l'immagine delle cellule cells.png. Realizzate tutte le operazione che
+# ritenete necessarie (includendo eventuali operazioni morfologiche) per ottenere la mappa binaria di
+# segmentazione in cui si evidenziano solo i bordi delle cellule presenti.
+# In fine, provate a determinare due mappe binarie: una in cui sono identificate solo le cellule piu
+# scure e l'altra con le cellule piu chiare.
+
 plt.close('all')
 x= np.float64(io.imread('../Immagini/cells.png'))/255
 plt.figure(1)
-plt.imshow(x, clim=[0,1], cmap='gray')
+plt.imshow(x, clim=None, cmap='gray')
 
 
-z = col.rgb2gray(x[:,:,0:3])*255
+x = col.rgb2gray(x[:,:,0:3])*255
 #evidenziare i contorni 
+# mask = x>48
+# x = x*mask
+# plt.figure(2)
+# plt.imshow(x, clim=[0,1], cmap='gray')
+# plt.title('mask')
 
-plt.figure(2)
-plt.imshow(z, clim=None, cmap='gray')
+# b=morph.rectangle(10,10)
+# y = morph.binary_opening(x,b)
 
-y = z >20
-plt.figure(3)
-plt.imshow(y, clim=None, cmap='gray')
+# plt.figure(3)
+# plt.imshow(y, clim=None, cmap='gray')
+# plt.title('mask ripulita')
 
-b=morph.rectangle(3,3)
-y_erosed = morph.binary_erosion(y,b)
-plt.figure(4)
-plt.imshow(y_erosed, clim=None, cmap='gray')
+# b=morph.rectangle(3,3)
+# y_ero= morph.binary_erosion(y,b)
+# y_dil= morph.binary_dilation(y,b)
+# y = y_dil ^ y_ero
+# plt.figure(4)
+# plt.imshow(y, clim=None, cmap='gray')
+# plt.title('Gradiente morfologico')
 
-y_contorno = y ^ y_erosed
+ #Punto 2
+b = morph.disk(20)
+y = morph.opening(x,b)
 plt.figure(5)
-plt.imshow(y_contorno, clim=None, cmap='gray')
-plt.title('contorno')
+plt.imshow(y, clim=None, cmap='gray')
+plt.title('Opening')
 
-#kmeans al momento possiamo usarlo solo sui grigi o sul colore
-from sklearn.cluster import k_means
-d = np.reshape(z, (-1, 1)) #reshape in -1,1 perchè mi restituisce un vettore
-K=3
-centroid, idx, sum_var = k_means(d, K) #k è il numero di classi
-y = np.reshape(idx, z.shape)
+plt.figure(6)
+plt.imshow(x-y, clim=None, cmap='gray')
+plt.title('x-Opening')
 
-plt.figure(6); plt.imshow(y, clim=[0,K-1], cmap='jet')
-plt.title('output')
+
+
+
+

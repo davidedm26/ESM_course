@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import scipy.ndimage as ndi
 import skimage.morphology as morph
 
-x= (io.imread('../Immagini/immagini_lab_morfologia/impronta.tif', plugin='pil'))
+x= np.float64(io.imread('../Immagini//immagini_lab_morfologia/impronta_bool.tif'))
 plt.figure(1)
 plt.imshow(x, clim=[0,1], cmap='gray')
 plt.title('input')
@@ -28,7 +28,6 @@ z = morph.binary_closing(y,b)
 plt.figure(3)
 plt.imshow(z, clim=[0,1], cmap='gray')
 plt.title('closing')
-
 
 #Proviamo funzione thin
 u=  morph.thin(z)
