@@ -28,18 +28,18 @@ plt.title('output')
 
 # plt.close('all')
 
-x= io.imread('../Immagini/Fiori256.bmp')
-plt.figure(3)
-plt.imshow(x)
+# x= io.imread('../Immagini/Fiori256.bmp')
+# plt.figure(3)
+# plt.imshow(x)
 
-M,N,L = x.shape
-K=6
-d = np.reshape(x, (M*N, L)) #a colori usa la terza dimensione di X nel reshape
-centroid, idx, sum_var = k_means(d, K)
-y = np.reshape(idx, x.shape[:-1])
+# M,N,L = x.shape
+# K=6
+# d = np.reshape(x, (M*N, L)) #a colori usa la terza dimensione di X nel reshape
+# centroid, idx, sum_var = k_means(d, K)
+# y = np.reshape(idx, x.shape[:-1])
 
-plt.figure(4); plt.imshow(y, clim=[0,K-1], cmap='jet')
-plt.title('output')
+# plt.figure(4); plt.imshow(y, clim=[0,K-1], cmap='jet')
+# plt.title('output')
 
 
 
