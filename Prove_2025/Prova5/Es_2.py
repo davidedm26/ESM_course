@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr 15 12:11:52 2025
+Created on Sat Apr 19 17:29:08 2025
 
 @author: david
 """
@@ -24,13 +24,36 @@ import skimage.color as col
 # scure e l'altra con le cellule piu chiare.
 
 plt.close('all')
-x= np.float64(io.imread('../Immagini/cells.png'))/255
+x= np.float64(io.imread('../Immagini/cells.png'))
 plt.figure(1)
 plt.imshow(x, clim=None, cmap='gray')
 
 
-x = col.rgb2gray(x[:,:,0:3])*255
-#evidenziare i contorni 
+ 
+#evidenziare i contorni tramite laplaciano
+# h = np.array([[0,1,0],[1,-5,1],[0,1,0]])
+# y = np.copy(x)
+# # y= ndi.correlate(x,h)
+# y_max=np.max(y)
+# y_min = np.min(y)
+# y = 255*(y - y_min)/ (y_max- y_min)
+# plt.figure('x - laplaciano')
+# plt.imshow(y, clim=None, cmap='gray')
+
+# x = ndi.median_filter(x ,(3,3))*255
+y =  x > 17
+plt.figure('x - laplaciano median filter')
+plt.imshow(y, clim=None, cmap='gray')
+
+from sklearn.cluster import k_means
+d = np.reshape(y, (-1,1))
+centroid, idx, sum_var = k_means(d,3)
+y1 = np.reshape(idx, x.shape)
+plt.figure('k_means')
+plt.imshow(y1, clim=None, cmap='gray')
+
+
+
 # mask = x>48
 # x = x*mask
 # plt.figure(2)
@@ -53,15 +76,15 @@ x = col.rgb2gray(x[:,:,0:3])*255
 # plt.title('Gradiente morfologico')
 
  #Punto 2
-b = morph.disk(20)
-y = morph.opening(x,b)
-plt.figure(5)
-plt.imshow(y, clim=None, cmap='gray')
-plt.title('Opening')
+# b = morph.disk(20)
+# y = morph.opening(x,b)
+# plt.figure(5)
+# plt.imshow(y, clim=None, cmap='gray')
+# plt.title('Opening')
 
-plt.figure(6)
-plt.imshow(x-y, clim=None, cmap='gray')
-plt.title('x-Opening')
+# plt.figure(6)
+# plt.imshow(x-y, clim=None, cmap='gray')
+# plt.title('x-Opening')
 
 
 
