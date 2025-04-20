@@ -17,41 +17,50 @@ x1=io.imread('../Immagini/img1.png')
 plt.figure(1)
 plt.imshow(x1, clim=None, cmap='gray')
 plt.title('Immagine di input 1')
-#-------------------------------------#
-x2=io.imread('../Immagini/img2.png')
+
+import skimage.transform as tf
+A = tf.AffineTransform( translation=(50,20), rotation =np.deg2rad(90), scale=(2) )
+y1 = tf.warp(x1,A)
+
 plt.figure(2)
-plt.imshow(x2, clim=None, cmap='gray')
-plt.title('Immagine di input 2')
-#----------------------------------------#
-# Realizzate tutte le operazioni che ritenete necessarie per ottenere la mappa di
-# segmentazione binaria in cui avete localizzato il difetto delle immagini img1.png e img2.png.
+plt.imshow(y1, clim=None, cmap='gray')
+plt.title('Immagine di input 1')
+
+#-------------------------------------#
+# x2=io.imread('../Immagini/img2.png')
+# plt.figure(2)
+# plt.imshow(x2, clim=None, cmap='gray')
+# plt.title('Immagine di input 2')
+# #----------------------------------------#
+# # Realizzate tutte le operazioni che ritenete necessarie per ottenere la mappa di
+# # segmentazione binaria in cui avete localizzato il difetto delle immagini img1.png e img2.png.
 
 
 
 
-#vedo maschera della varianza
-var = ndi.generic_filter(x1, np.var, (4,4))
-plt.figure('Im1 - VAR')
-plt.imshow(var, clim=None, cmap='gray')
+# #vedo maschera della varianza
+# var = ndi.generic_filter(x1, np.var, (4,4))
+# plt.figure('Im1 - VAR')
+# plt.imshow(var, clim=None, cmap='gray')
 
 
 
-var_med = ndi.median_filter(var, (10,10))
+# var_med = ndi.median_filter(var, (10,10))
 
-var_med = var_med <10
-var_med = morph.binary_erosion(var_med, morph.rectangle(3,3))
-plt.figure('VAR ELABORATA')
-plt.imshow(var_med , clim=None, cmap='gray')
+# var_med = var_med <10
+# var_med = morph.binary_erosion(var_med, morph.rectangle(3,3))
+# plt.figure('VAR ELABORATA')
+# plt.imshow(var_med , clim=None, cmap='gray')
 
-#vedo maschera della varianza
-var = ndi.generic_filter(x2, np.var, (4,4))
-plt.figure('Im2 - VAR')
-plt.imshow(var, clim=None, cmap='gray')
+# #vedo maschera della varianza
+# var = ndi.generic_filter(x2, np.var, (4,4))
+# plt.figure('Im2 - VAR')
+# plt.imshow(var, clim=None, cmap='gray')
 
 
-var_med = ndi.median_filter(var, (10,10))
-plt.figure('VAR ELABORATA (2)')
-plt.imshow(var_med <10, clim=None, cmap='gray')
+# var_med = ndi.median_filter(var, (10,10))
+# plt.figure('VAR ELABORATA (2)')
+# plt.imshow(var_med <10, clim=None, cmap='gray')
 
 
 

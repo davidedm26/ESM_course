@@ -17,7 +17,8 @@ plt.close('all')
 x= np.float64(io.imread('../Immagini/barbara.jpg'))
 x = np.mean(x , -1)
 #aggiungo rumore gaussiano
-noisy = x + 20*np.random.randn()
+M,N = x.shape
+noisy = x + 20*np.random.randn(M,N)
 plt.figure(1)
 plt.subplot(1,2,1)
 plt.imshow(noisy, clim=[0,255], cmap='gray')

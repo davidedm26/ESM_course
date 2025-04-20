@@ -18,16 +18,25 @@ def smf(x,k,T):
     out[z==1] = m[z==1]
     return out
 
-#generazione maschera binaria (rumore/non_rumore)
-x =np.float64(io.imread('../immagini/lena.jpg'))/255
+
+x =np.float64(io.imread('../immagini/lena.jpg'))
 #applico rumore sale e pepe
-noisy = random_noise(x, 's&p', amount = 0.2 )
+noisy = random_noise(x/255, 's&p', amount = 0.2 )*255
+#in alternativa
+# p=0.2
+# val = np.random.rand(*x.shape)
+# m1= val < p
+# m2 = (2*val) < p
+# y = np.copy(x)
+# y[m1]=255
+# y[m2]=0
+
 plt.figure(1)
 plt.title('input')
 plt.imshow(noisy, clim=[0,1], cmap='gray')
 
 k=5
-T=0.03
+T=30
 # y = smf(noisy, k, T)
 
 # plt.figure(2)
@@ -49,7 +58,7 @@ for i in [3,5,7,11]:
     psnr_smf.append(temp1)
     
     z = ndi.median_filter(noisy, (i,i))
-    mse2 = np.mean( (z-y)**2)
+    mse2 = np.mean( (z-x)**2)
     temp2 = 10*np.log10(255**2/mse2)                  #psnr = 10log10*(255**2/MSE)
     psnr_median.append(temp2)
 

@@ -21,67 +21,54 @@ plt.title('Immagine di input')
 
 
 #segmentazione tramite op.morfologiche (dilation-erosion)
-b= morph.rectangle(3,3)
+b= morph.rectangle(4,5)
 x1 = morph.dilation(x,b)
 x2 = morph.erosion(x,b)
 y = x1 - x2
-y = y>70
+y = y>80
+
+y = morph.opening(y, morph.rectangle(2,2))
 
 plt.figure(2)
 plt.imshow(y, clim=None, cmap='gray')
 plt.title('Mappa dei contorni tramite op.morfologiche')
 
-#segmentazione tramite filtraggio spaziale (gradiente)
-#calcolo derivata prima rispetto a m
-m1= np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
-dm = ndi.correlate(x,m1)
-#calcolo derivata seconda rispetto a n
-m2= np.array([[-1,0,1],[-1,0,1],[-1,0,1]])
-dn = ndi.correlate(x,m2)
-#calcolo gradiente
-y = np.sqrt(dm**2 + dn**2)
-#tresholding
-y = y>100
+# #segmentazione tramite filtraggio spaziale (gradiente)
+# #calcolo derivata prima rispetto a m
+# m1= np.array([[-1,-1,-1],[0,0,0],[1,1,1]])
+# dm = ndi.correlate(x,m1)
+# #calcolo derivata seconda rispetto a n
+# m2= np.array([[-1,0,1],[-1,0,1],[-1,0,1]])
+# dn = ndi.correlate(x,m2)
+# #calcolo gradiente
+# y = np.sqrt(dm**2 + dn**2)
+# #tresholding
+# y = y>100
 
 
 
-plt.figure(3)
-plt.imshow(y, clim=None, cmap='gray')
-plt.title('Mappa dei contorni tramite gradiente')
+# plt.figure(3)
+# plt.imshow(y, clim=None, cmap='gray')
+# plt.title('Mappa dei contorni tramite gradiente')
 
-#strategia consigliata dalla traccia
+# #strategia consigliata dalla traccia
 
-def elab(x):
-    m_a = np.mean(x)
-    m_g = np.prod(x)**(1/np.size(x))
-    return m_a/m_g
+# def elab(x):
+#     m_a = np.mean(x)
+#     m_g = np.prod(x)**(1/np.size(x))
+#     return m_a/m_g
 
-k=4
-T= 1.21
+# k=5
+# T= 1.15
 
-z = ndi.generic_filter(x**2,  elab, (k,k),)
+# z = ndi.generic_filter(x**2,  elab, (k,k),)
 
-y = z >= T
-
-b = morph.rectangle(2,3)
-for i in range(100):
-    y = morph.binary_closing(y,b)
-
-y = morph.thin(y,1)
-
-# b = morph.rectangle(2,2)
-# y1 = morph.binary_dilation(y,b)
-
-# y2 = morph.binary_erosion(y,b)
-
-# y = y1 ^ y2
+# y = z >= T
 
 
-
-
+# y = morph.opening(y, morph.disk(1))
 # y = morph.thin(y)
-# y = morph.skeletonize(y)
 
-plt.figure(4)
-plt.imshow(y, clim=None, cmap='gray')
-plt.title('Mappa dei contorni tramite strategia consigliata')
+# plt.figure(4)
+# plt.imshow(y, clim=None, cmap='gray')
+# plt.title('Mappa dei contorni tramite strategia consigliata')
