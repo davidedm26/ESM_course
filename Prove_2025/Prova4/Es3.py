@@ -13,27 +13,19 @@ import skimage.morphology as morph
 import skimage.color as color
 
 plt.close('all')
-x1=io.imread('../Immagini/img1.png')
-plt.figure(1)
-plt.imshow(x1, clim=None, cmap='gray')
-plt.title('Immagine di input 1')
+# x1=io.imread('../Immagini/img1.png')
+# plt.figure(1)
+# plt.imshow(x1, clim=None, cmap='gray')
+# plt.title('Immagine di input 1')
 
-import skimage.transform as tf
-A = tf.AffineTransform( translation=(50,20), rotation =np.deg2rad(90), scale=(2) )
-y1 = tf.warp(x1,A)
-
-plt.figure(2)
-plt.imshow(y1, clim=None, cmap='gray')
-plt.title('Immagine di input 1')
-
-#-------------------------------------#
-# x2=io.imread('../Immagini/img2.png')
-# plt.figure(2)
-# plt.imshow(x2, clim=None, cmap='gray')
-# plt.title('Immagine di input 2')
-# #----------------------------------------#
-# # Realizzate tutte le operazioni che ritenete necessarie per ottenere la mappa di
-# # segmentazione binaria in cui avete localizzato il difetto delle immagini img1.png e img2.png.
+# #-------------------------------------#
+# # x2=io.imread('../Immagini/img2.png')
+# # plt.figure(2)
+# # plt.imshow(x2, clim=None, cmap='gray')
+# # plt.title('Immagine di input 2')
+# # #----------------------------------------#
+# # # Realizzate tutte le operazioni che ritenete necessarie per ottenere la mappa di
+# # # segmentazione binaria in cui avete localizzato il difetto delle immagini img1.png e img2.png.
 
 
 
@@ -63,6 +55,45 @@ plt.title('Immagine di input 1')
 # plt.imshow(var_med <10, clim=None, cmap='gray')
 
 
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr 19 17:56:22 2025
+
+prova 4, ex 3
+"""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import skimage.io as io
+import scipy.ndimage as ndi
+plt.close('all')
+
+x1 = np.float64(io.imread('../Immagini/img1.png'))
+x2 = np.float64(io.imread('../Immagini/img2.png'))
+
+
+m1 = ndi.gaussian_filter(x1, (10,10))<15
+m2 = ndi.gaussian_filter(x2, (10,10))<15
+
+plt.figure()
+plt.subplot(1,2,1)
+plt.imshow(x1, clim=[0,255], cmap='gray')
+plt.title('immagine')
+plt.subplot(1,2,2)
+
+plt.imshow(m1, clim=[0,1], cmap='gray')
+plt.title('risultato')
+
+import skimage.morphology as morf
+m1 = morf.dilation(m1, morf.disk(50)) 
+
+plt.figure()
+plt.subplot(1,2,1)
+plt.imshow(x2, clim=[0,255], cmap='gray')
+plt.title('immagine')
+plt.subplot(1,2,2)
+plt.imshow(m1, clim=[0,1], cmap='gray')
+plt.title('risultato')
 
 
 

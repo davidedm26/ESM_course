@@ -13,7 +13,7 @@ from skimage.feature import canny
 import skimage.morphology as morph
 plt.close('all')
 
-x = np.reshape(np.fromfile('../immagini/target_rumorosa.raw', np.float32), (256,256))
+x = np.reshape(np.fromfile('target_rumorosa.raw', np.float32), (256,256))
 
 plt.figure()
 plt.imshow(x,clim=[0,255], cmap='gray')

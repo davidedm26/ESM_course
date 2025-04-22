@@ -11,28 +11,41 @@ import skimage.io as io
 import scipy.ndimage as ndi
 import matplotlib.pyplot as plt
 
-x = np.load('../immagini/dati.npy')
-# plt.imshow(x, clim=None, cmap='gray')
+p1 = np.load('../immagini/data_P1.npy')
+plt.figure('PNRU')
+plt.subplot(1,2,1)
+plt.imshow(p1, clim=None, cmap='gray')
 
-#L'immagine fornita non corrisponde a quella richiesta dalla traccia!
-import scipy.io
-import numpy as np
+plt.subplot(1,2,2)
+p2 = np.load('../immagini/data_P2.npy')
+plt.imshow(p2, clim=None, cmap='gray')
 
-# Carica il file .mat
-mat_data = scipy.io.loadmat('../immagini/img_SAR.mat')
+def detect(p1,p2):
+    p1_m = ndi.uniform_filter(p1, (127,127)) 
+    p2_m = ndi.uniform_filter(p2, (127,127)) 
+    
+    a = (p1 - p1_m)
+    b = (p2 - p2_m)
+    num = ndi.generic_filter( a*b, np.sum, (127,127))
+    
+    c = ndi.generic_filter(a**2, np.sum, (127,127))
+    d = ndi.generic_filter(b**2, np.sum, (127,127))
+    den = np.sqrt(c) * np.sqrt(d)
+    rho = num/den                                                                
+    
+    plt.figure('correlazione')
+    plt.imshow(rho, cmap='jet')
+    
+    
+    mask = rho < 0.03
+    plt.figure('mask')
+    plt.imshow(mask, clim=[0,1], cmap='gray')
 
-# Esamina il contenuto per capire quale variabile contiene l'immagine
-# Ad esempio, se l'immagine è memorizzata in una variabile chiamata 'image'
-image = mat_data['img']  # sostituisci 'image' con il nome corretto
+    return mask
 
-# Salva come file .npy
-np.save('image.npy', image)
-x = image
-# x = 255 * (x - np.min(x)) / (np.max(x) - np.max(min))
-plt.figure()
-plt.imshow(x, clim = [0,1], cmap='gray')
+mask = detect(p1,p2)
 
-
+io.imsave('mask.jpg', mask, quality = 50)
 
 
 

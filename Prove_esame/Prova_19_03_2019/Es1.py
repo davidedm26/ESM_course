@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 import scipy.ndimage as ndi
 import numpy as np
 
+plt.close('all')
 x = io.imread('./star_trek.jpg')
 x= np.float64(x)
 plt.figure(1)
@@ -54,11 +55,18 @@ plt.tight_layout()
 
 #Realizzare enhancement solo della zona scura
 #Calcolando opportunamente la maschera in funzione delle statistiche locali
+# k=20
+# m = ndi.generic_filter(x, np.mean, (k,k))
+# plt.figure('medie')
+# plt.imshow(m, clim=[0,255], cmap='gray')
 
+# mask = (m > 30) 
+# plt.figure('mask')
+# plt.imshow(mask, clim=[0,1], cmap='gray')
 
 k=25
 # w = ndi.generic_filter(y, np.mean, (k,k))
-w = ndi.median_filter(y, (k,k))
+w = ndi.gaussian_filter(y, (k,k))
 
 plt.figure(3)
 plt.imshow(w, clim=None, cmap='gray')
@@ -66,15 +74,24 @@ plt.title(f'filtro con finestra lato k={k}')
 
 #Intercetto area chiara nell'immagine equalizzata
 M,N= w.shape
-l,k = np.meshgrid(M,N)
-mask = (w > 190)& (l>k)
+l,k = np.meshgrid(np.arange(N), np.arange(M))
+mask = (w > 160)& (l+400 < k)
+mask = ndi.gaussian_filter(np.float32(mask),100)
 plt.figure(4)
 plt.imshow(mask, clim=[0,1], cmap='gray')
 
+
+# import skimage.morphology as mor
+# mask = mor.dilation(mask, mor.disk(15))
+# # mask = mor.opening(mask, mor.rectangle(150,159))
+# plt.figure('mask morfo')
+# plt.imshow(mask, clim=[0,1], cmap='gray')
+
 #Realizza enhancement della sola zona scura
 z = np.copy(y)
-z[mask] = x[mask]
-plt.figure(5)
+z = x * mask + y*(1-mask)
+# z[mask] = x[mask]
+plt.figure(6)
 plt.imshow(z, clim=None, cmap='gray')
 plt.title('Enhancement')
 

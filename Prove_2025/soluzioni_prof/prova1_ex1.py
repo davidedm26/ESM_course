@@ -31,7 +31,7 @@ def smf(x,k,T):
     return y
 
 
-x = np.float64(io.imread('../immagini/lena.jpg'))
+x = np.float64(io.imread('lena.jpg'))
 noisy = random_sp(x, 0.2)
 
 list_k = [3,5,7,9,11]
